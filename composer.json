@@ -37,7 +37,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Mazepress\\Gateway\\fac\\Tests\\": "tests"
+			"Mazepress\\Gateway\\Fac\\Tests\\": "tests"
 		}
 	},
 	"prefer-stable": true,

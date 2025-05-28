@@ -33,6 +33,7 @@
 	<rule ref="WordPress">
 		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed"/>
 		<exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames"/>
+		<exclude name="Generic.Functions.CallTimePassByReference" />
 	</rule>
 
 	<!-- Include the WordPress-Extra standard. -->
@@ -106,7 +107,7 @@
 	For more information, also see:
 	https://github.com/PHPCompatibility/PHPCompatibility
 	-->
-	<config name="testVersion" value="7.4-"/>
+	<config name="testVersion" value="7.4"/>
 	<rule ref="PHPCompatibilityWP"/>
 
 </ruleset>

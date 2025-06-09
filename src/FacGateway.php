@@ -73,10 +73,14 @@ class FacGateway extends Payment {
 	/**
 	 * Initiate class.
 	 *
-	 * @param bool $is_live Use live mode.
+	 * @param string $public_key  The public key.
+	 * @param string $private_key The private key.
+	 * @param bool   $live        Live mode.
 	 */
-	public function __construct( bool $is_live = false ) {
-		$this->set_is_live( $is_live );
+	public function __construct( string $public_key, string $private_key, bool $live = false ) {
+		$this->set_public_key( $public_key );
+		$this->set_private_key( $private_key );
+		$this->set_is_live( $live );
 	}
 
 	/**

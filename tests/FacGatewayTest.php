@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Mazepress\Gateway\Fac\Tests;
 
-use Mazepress\Gateway\Payment;
 use Mazepress\Gateway\Address;
 use Mazepress\Gateway\CreditCard;
 use Mazepress\Gateway\Transaction;
@@ -31,21 +30,24 @@ class FacGatewayTest extends WP_Mock\Tools\TestCase {
 	 */
 	public function test_properties(): void {
 
-		$object = new FacGateway();
+		$object = new FacGateway( 'public1', 'private1' );
 
-		$this->assertInstanceOf( FacGateway::class, $object->set_public_key( 'public1' ) );
 		$this->assertEquals( 'public1', $object->get_public_key() );
-
-		$this->assertInstanceOf( FacGateway::class, $object->set_private_key( 'private1' ) );
 		$this->assertEquals( 'private1', $object->get_private_key() );
+		$this->assertFalse( $object->get_is_live() );
+
+		$this->assertInstanceOf( FacGateway::class, $object->set_public_key( 'public2' ) );
+		$this->assertEquals( 'public2', $object->get_public_key() );
+
+		$this->assertInstanceOf( FacGateway::class, $object->set_private_key( 'private2' ) );
+		$this->assertEquals( 'private2', $object->get_private_key() );
+
+		$this->assertInstanceOf( FacGateway::class, $object->set_is_live( true ) );
+		$this->assertTrue( $object->get_is_live() );
 
 		$this->assertEquals( '464748', $object->get_acquirer_id() );
 		$this->assertInstanceOf( FacGateway::class, $object->set_acquirer_id( '464749' ) );
 		$this->assertEquals( '464749', $object->get_acquirer_id() );
-
-		$this->assertFalse( $object->get_is_live() );
-		$this->assertInstanceOf( FacGateway::class, $object->set_is_live( true ) );
-		$this->assertTrue( $object->get_is_live() );
 
 		$this->assertEquals( $object::PRODUCTION, $object->get_endpoint() );
 
@@ -61,7 +63,7 @@ class FacGatewayTest extends WP_Mock\Tools\TestCase {
 	 */
 	public function test_validate_credentials(): void {
 
-		$object = new FacGateway();
+		$object = new FacGateway( '', '' );
 		$method = $this->getInaccessibleMethod( $object, 'validate_credentials' );
 
 		// Check for valid public_key.
@@ -113,10 +115,7 @@ class FacGatewayTest extends WP_Mock\Tools\TestCase {
 	 */
 	public function test_process_success(): void {
 
-		$object = new FacGateway( false );
-		$object->set_public_key( 'public1' );
-		$object->set_private_key( 'private1' );
-		$object->set_acquirer_id( '464748' );
+		$object = new FacGateway( 'public1', 'private1', false );
 		$object->set_amount( 100 );
 		$object->set_card( new CreditCard() );
 		$object->set_address( new Address() );
@@ -157,7 +156,7 @@ class FacGatewayTest extends WP_Mock\Tools\TestCase {
 	 */
 	public function test_process_failure(): void {
 
-		$object = new FacGateway( false );
+		$object = new FacGateway( '', '', false );
 		$output = $object->process();
 		$this->assertInstanceOf( \WP_Error::class, $output );
 	}
@@ -169,10 +168,7 @@ class FacGatewayTest extends WP_Mock\Tools\TestCase {
 	 */
 	public function test_process_exception(): void {
 
-		$object = new FacGateway( false );
-		$object->set_public_key( 'public1' );
-		$object->set_private_key( 'private1' );
-		$object->set_acquirer_id( '464748' );
+		$object = new FacGateway( 'public1', 'private1', false );
 		$object->set_amount( 100 );
 		$object->set_card( new CreditCard() );
 		$object->set_address( new Address() );
@@ -200,10 +196,7 @@ class FacGatewayTest extends WP_Mock\Tools\TestCase {
 	 */
 	public function test_process_invalid_response(): void {
 
-		$object = new FacGateway( false );
-		$object->set_public_key( 'public1' );
-		$object->set_private_key( 'private1' );
-		$object->set_acquirer_id( '464748' );
+		$object = new FacGateway( 'public1', 'private1', false );
 		$object->set_amount( 100 );
 		$object->set_card( new CreditCard() );
 		$object->set_address( new Address() );

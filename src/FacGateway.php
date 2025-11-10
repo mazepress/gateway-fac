@@ -99,6 +99,7 @@ class FacGateway extends Payment {
 
 		$billing    = $this->get_address();
 		$card       = $this->get_card();
+		$expiry     = (string) $card->get_expiry_month() . substr( (string) $card->get_expiry_year(), 2, 2 );
 		$amount     = $this->get_amount();
 		$amount_pad = str_pad( (string) sprintf( '%s00', $amount ), 12, '0', STR_PAD_LEFT );
 
@@ -131,7 +132,7 @@ class FacGateway extends Payment {
 		// Credit Card Details.
 		$card_details = array(
 			'CardNumber'     => (string) $card->get_number(),
-			'CardExpiryDate' => (string) $card->get_expiry(),
+			'CardExpiryDate' => (string) $expiry,
 			'CardCVV2'       => (string) $card->get_cvv(),
 			'IssueNumber'    => '',
 			'StartDate'      => '',
